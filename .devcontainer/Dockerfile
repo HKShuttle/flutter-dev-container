@@ -47,7 +47,7 @@ RUN	groupadd --gid $USER_GID $USERNAME \
 ENV ANDROID_SDK_TOOLS_VERSION=8512546
 ENV ANDROID_PLATFORM_VERSION=33
 ENV ANDROID_BUILD_TOOLS_VERSION=33.0.0
-ENV ANDROID_HOME=~/android-sdk-linux
+ENV ANDROID_HOME=/home/vscode/android-sdk-linux
 ENV ANDROID_SDK_ROOT="$ANDROID_HOME"
 ENV PATH=${PATH}:${ANDROID_HOME}/cmdline-tools/cmdline-tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/emulator
 
@@ -57,7 +57,7 @@ ENV PATH=${PATH}:${ANDROID_HOME}/cmdline-tools/cmdline-tools/bin:${ANDROID_HOME}
 ENV FLUTTER_CHANNEL="stable"
 ENV FLUTTER_VERSION="3.3.4"
 # Make sure to use the needed channel and version for this.
-ENV FLUTTER_HOME=~/flutter
+ENV FLUTTER_HOME=/home/vscode/flutter
 ENV PATH=${PATH}:${FLUTTER_HOME}/bin
 
 
@@ -74,16 +74,16 @@ RUN curl -C - --output android-sdk-tools.zip https://dl.google.com/android/repos
 	&& sdkmanager "platforms;android-${ANDROID_PLATFORM_VERSION}" "build-tools;$ANDROID_BUILD_TOOLS_VERSION" \
 	&& sdkmanager --install "cmdline-tools;latest" 
 # create emulator android	
-RUN  sdkmanager "system-images;android-${ANDROID_PLATFORM_VERSION};google_apis;x86_64" \
-	 && avdmanager create avd -n Android${ANDROID_PLATFORM_VERSION} -k "system-images;android-${ANDROID_PLATFORM_VERSION};google_apis;x86_64"
+RUN  sdkmanager "system-images;android-${ANDROID_PLATFORM_VERSION};google_apis;x86_64" 
+# avdmanager create avd -n Android${ANDROID_PLATFORM_VERSION} -k "system-images;android-${ANDROID_PLATFORM_VERSION};google_apis;x86_64"
 
 
 #
 # Flutter SDK
-RUN curl -C - --output flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/${FLUTTER_CHANNEL}/linux/flutter_linux_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.tar.xz \
-	&& tar -xf flutter.tar.xz -C ~ \
-	&& rm flutter.tar.xz \
-	&& flutter config --android-sdk "${ANDROID_SDK_ROOT}" \
-	&& yes | flutter doctor --android-licenses \
-	&& flutter config --no-analytics \
-	&& flutter update-packages
+RUN curl -C - --output flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/${FLUTTER_CHANNEL}/linux/flutter_linux_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.tar.xz 
+RUN tar -xf flutter.tar.xz -C /home/vscode/ 
+RUN rm flutter.tar.xz 
+RUN flutter config --android-sdk "${ANDROID_SDK_ROOT}" 
+RUN yes | flutter doctor --android-licenses 
+RUN flutter config --no-analytics 
+# flutter update-packages
